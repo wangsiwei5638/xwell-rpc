@@ -36,9 +36,9 @@ public class Register {
 		
 	}
 	
-	public static URL getRegister(String interfaceName) {
-		return register.get(interfaceName).keySet().iterator().next();
-	}
+//	public static URL getRegister(String interfaceName) {
+//		return register.get(interfaceName).keySet().iterator().next();
+//	}
 	
 	public static Class<?> getClass(URL url,String interfaceName) {
 		return register.get(interfaceName).get(url);

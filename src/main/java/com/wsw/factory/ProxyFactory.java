@@ -1,29 +1,21 @@
 package com.wsw.factory;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-
 import com.wsw.bean.RPCRequest;
 import com.wsw.bean.URL;
-import com.wsw.protocol.http.HttpClient;
-import com.wsw.register.Register;
 
-public class ProxyFactory<T> {
+/**   
+ * @ClassName:  ProxyFactory   
+ * @Description:
+ * 					代理工厂接口
+ * 					接下来的实现类都需要实现这个工厂
+ * @author: wsw
+ * @date:   2019年3月15日
+ * @Copyright: http://www.iwangsiwei.com
+ */
+public interface ProxyFactory {
 
-	public static <T> T getProxy(final Class<T> interfaceClass){
-		
-		return (T) Proxy.newProxyInstance(interfaceClass.getClassLoader(),new Class[] {interfaceClass}, new InvocationHandler() {
-			
-			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-				
-				HttpClient httpClient = new HttpClient();
-				RPCRequest rpcRequest = new RPCRequest("Hello", "sayHello", new Class[] {String.class}, new Object[]{"wsw"});
-				return httpClient.post(Register.getRegister(interfaceClass.getName()), rpcRequest);
-			}
-			
-			
-		});
-		
-	}
+	/**
+	 * 	获取代理对象
+	 */
+	<T> T getProxy(Class<T> interfaceClass,RPCRequest rpcRequest,URL url);
 }

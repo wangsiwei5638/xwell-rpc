@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rpc-config>
+	<url id="url1" ip="localhost" port="8080" />
+	<protocol>http</protocol>
+</rpc-config>

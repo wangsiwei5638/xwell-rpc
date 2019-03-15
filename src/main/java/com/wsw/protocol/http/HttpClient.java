@@ -9,12 +9,15 @@ import java.net.MalformedURLException;
 import java.net.URLConnection;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 
 import com.wsw.bean.RPCRequest;
 import com.wsw.bean.URL;
 
 public class HttpClient {
 
+	private static Logger logger = Logger.getLogger(HttpClient.class);
+			
 	public String post(URL u,RPCRequest rpcRequest) {
 		ObjectOutputStream objectOutputStream = null;
 		try {
@@ -32,11 +35,9 @@ public class HttpClient {
 			
 			
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("URL格式错误",e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("IO异常",e);
 		} finally {
 			if(objectOutputStream != null) {
 				try {
