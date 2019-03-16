@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.iwangsiwei.com/rpc-config"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://www.iwangsiwei.com/rpc-config"
+	elementFormDefault="qualified">
+
+	<xsd:element name="rpc-config">
+		<xsd:complexType>
+			<xsd:choice minOccurs="2" maxOccurs="unbounded">
+				<xsd:element name="protocol"></xsd:element>
+				<xsd:element name="url">
+					<xsd:complexType>
+						<xsd:attribute name="id" type="xsd:string"></xsd:attribute>
+						<xsd:attribute name="ip" type="xsd:string"></xsd:attribute>
+						<xsd:attribute name="port" type="xsd:string"></xsd:attribute>
+					</xsd:complexType>
+					<!-- <xsd:complexType>
+						<xsd:choice minOccurs="3" maxOccurs="unbounded">
+							<xsd:element name="id"></xsd:element>
+							<xsd:element name="ip"></xsd:element>
+							<xsd:element name="port"></xsd:element>
+						</xsd:choice>
+					</xsd:complexType> -->
+				</xsd:element>
+			</xsd:choice>
+			<xsd:attribute name="version" type="double"
+				use="optional"></xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+
+
+
+</xsd:schema>

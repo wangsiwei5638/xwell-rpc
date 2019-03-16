@@ -16,24 +16,25 @@ import com.wsw.util.DOMUtils;
 public class Test01 {
 
 	public static void main(String[] args) throws Exception {
-		SAXReader reader = new SAXReader();
-		InputStream is = 
-				Test01.class.getClassLoader().getResourceAsStream("rpc-config.xml");
-		Document doc = reader.read(is);
-		Element rootElement = doc.getRootElement();
-		Iterator<Element> elementIterator = rootElement.elementIterator();
-		while (elementIterator.hasNext()) {
-			Element next = elementIterator.next();
-			if("url".equals(next.getName())) {
-				System.out.println(next.attribute("id").getData());
-				System.out.println(next.attribute("ip").getData());
-				System.out.println(next.attribute("port").getData());
-			}else if("protocol".equals(next.getName())) {
-				System.out.println(next.getData());
-			}
-			
-			
-		}
+//		SAXReader reader = new SAXReader();
+//		InputStream is = 
+//				Test01.class.getClassLoader().getResourceAsStream("rpc-config.xml");
+//		Document doc = reader.read(is);
+//		Element rootElement = doc.getRootElement();
+//		Iterator<Element> elementIterator = rootElement.elementIterator();
+//		while (elementIterator.hasNext()) {
+//			Element next = elementIterator.next();
+//			if("url".equals(next.getName())) {
+//				System.out.println(next.attribute("id").getData());
+//				System.out.println(next.attribute("ip").getData());
+//				System.out.println(next.attribute("port").getData());
+//			}else if("protocol".equals(next.getName())) {
+//				System.out.println(next.getData());
+//			}
+//			
+//			
+//		}
+		System.out.println( DOMUtils.class.getClassLoader());
 //		<company id="1001">
 //        <name>万科A</name>
 //        <address>广东深圳</address>

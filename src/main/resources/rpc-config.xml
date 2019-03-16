@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rpc-config>
-	<url id="url1" ip="localhost" port="8080" />
+<rpc-config xmlns="http://www.iwangsiwei.com/rpc-config"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.iwangsiwei.com/rpc-config rpc-config.xsd"
+	version="1.0">
+	
+	
 	<protocol>http</protocol>
+	<url id="url1" ip="localhost" port="8080"></url>
+
+
+
 </rpc-config>
