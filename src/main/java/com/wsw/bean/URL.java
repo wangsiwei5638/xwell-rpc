@@ -1,5 +1,6 @@
 package com.wsw.bean;
 
+
 /**
  * @author wsw
  *

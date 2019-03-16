@@ -1,11 +1,11 @@
-package com.wsw.test;
+package com.wsw.provider;
 
 import com.wsw.bean.URL;
 import com.wsw.protocol.http.HttpProtocol;
 import com.wsw.provider.impl.HelloImpl;
 import com.wsw.register.Register;
 
-public class T01 {
+public class P {
 
 	
 	public static void main(String[] args) {

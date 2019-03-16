@@ -1,4 +1,4 @@
-package com.wsw.test;
+package com.wsw.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,8 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface RPCClass {
+@Target(ElementType.METHOD)
+public @interface RPCMethod {
 
-	//TEST
 }

@@ -3,6 +3,8 @@ package com.wsw.bean;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import com.wsw.service.cache.URLCache;
+
 /**   
  * @ClassName:  RPCRequest   
  * @Description:	RPC请求对象
@@ -14,6 +16,7 @@ public class RPCRequest implements Serializable{
 
 	private static final long serialVersionUID = 2434379241114505067L;
 	
+	private URL url;
 	/**   
 	 * @Fields interfaceName : 调用的接口名 
 	 */   
@@ -32,19 +35,57 @@ public class RPCRequest implements Serializable{
 	private Object[] params;
 	
 	
-	public RPCRequest(String interfaceName, String methodName, Class<?>[] types, Object[] params) {
+	
+	
+	public RPCRequest(URL url, String interfaceName, String methodName, Class<?>[] types, Object[] params) {
 		super();
+		this.url = url;
 		this.interfaceName = interfaceName;
 		this.methodName = methodName;
 		this.types = types;
 		this.params = params;
 	}
 	@Override
-	public String toString() {
-		return "RPCRequest [interfaceName=" + interfaceName + ", methodName=" + methodName + ", types="
-				+ Arrays.toString(types) + ", params=" + Arrays.toString(params) + "]";
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((interfaceName == null) ? 0 : interfaceName.hashCode());
+		result = prime * result + ((methodName == null) ? 0 : methodName.hashCode());
+		result = prime * result + Arrays.hashCode(params);
+		result = prime * result + Arrays.hashCode(types);
+		result = prime * result + ((url == null) ? 0 : url.hashCode());
+		return result;
 	}
-	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RPCRequest other = (RPCRequest) obj;
+		if (interfaceName == null) {
+			if (other.interfaceName != null)
+				return false;
+		} else if (!interfaceName.equals(other.interfaceName))
+			return false;
+		if (methodName == null) {
+			if (other.methodName != null)
+				return false;
+		} else if (!methodName.equals(other.methodName))
+			return false;
+		if (!Arrays.equals(params, other.params))
+			return false;
+		if (!Arrays.equals(types, other.types))
+			return false;
+		if (url == null) {
+			if (other.url != null)
+				return false;
+		} else if (!url.equals(other.url))
+			return false;
+		return true;
+	}
 	public String getInterfaceName() {
 		return interfaceName;
 	}
@@ -69,46 +110,17 @@ public class RPCRequest implements Serializable{
 	public void setParams(Object[] params) {
 		this.params = params;
 	}
-	
-	
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((interfaceName == null) ? 0 : interfaceName.hashCode());
-		result = prime * result + ((methodName == null) ? 0 : methodName.hashCode());
-		result = prime * result + Arrays.hashCode(params);
-		result = prime * result + Arrays.hashCode(types);
-		return result;
+	public URL getUrl() {
+		if(url == null) {
+			return URLCache.getDefUrl();
+		}
+		return url;
+	}
+	public void setUrl(URL url) {
+		this.url = url;
 	}
 	
 	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		RPCRequest other = (RPCRequest) obj;
-		if (interfaceName == null) {
-			if (other.interfaceName != null)
-				return false;
-		} else if (!interfaceName.equals(other.interfaceName))
-			return false;
-		if (methodName == null) {
-			if (other.methodName != null)
-				return false;
-		} else if (!methodName.equals(other.methodName))
-			return false;
-		if (!Arrays.equals(params, other.params))
-			return false;
-		if (!Arrays.equals(types, other.types))
-			return false;
-		return true;
-	}
 	
 	
 

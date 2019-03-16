@@ -17,5 +17,5 @@ public interface ProxyFactory {
 	/**
 	 * 	获取代理对象
 	 */
-	<T> T getProxy(Class<T> interfaceClass,RPCRequest rpcRequest,URL url);
+	<T> T getProxy(Class<T> interfaceClass,RPCRequest rpcRequest);
 }

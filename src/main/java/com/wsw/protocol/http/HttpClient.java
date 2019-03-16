@@ -18,10 +18,10 @@ public class HttpClient {
 
 	private static Logger logger = Logger.getLogger(HttpClient.class);
 			
-	public String post(URL u,RPCRequest rpcRequest) {
+	public String post(RPCRequest rpcRequest) {
 		ObjectOutputStream objectOutputStream = null;
 		try {
-			java.net.URL url = new java.net.URL("http",u.getHost(),u.getProt(),"/");
+			java.net.URL url = new java.net.URL("http",rpcRequest.getUrl().getHost(),rpcRequest.getUrl().getProt(),"/");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("POST");
 			connection.setDoOutput(true);

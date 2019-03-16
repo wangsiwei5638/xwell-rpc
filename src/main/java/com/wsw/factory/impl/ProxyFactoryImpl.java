@@ -12,13 +12,15 @@ import com.wsw.bean.URL;
 import com.wsw.factory.ProxyFactory;
 import com.wsw.protocol.http.HttpClient;
 import com.wsw.register.Register;
+import com.wsw.service.cache.URLCache;
+import com.wsw.util.AssertUtil;
 
 public class ProxyFactoryImpl implements ProxyFactory{
 
-	private static Logger logger = Logger.getLogger(ProxyFactoryImpl.class); 
+	private static Logger logger = Logger.getLogger(ProxyFactoryImpl.class);
 
 	@SuppressWarnings("unchecked")
-	public <T> T getProxy(final Class<T> interfaceClass,final RPCRequest rpcRequest,final URL url){
+	public <T> T getProxy(final Class<T> interfaceClass,final RPCRequest rpcRequest){
 		
 		return (T) Proxy.newProxyInstance(interfaceClass.getClassLoader(),new Class[] {interfaceClass}, new InvocationHandler() {
 			
@@ -26,11 +28,15 @@ public class ProxyFactoryImpl implements ProxyFactory{
 				
 				HttpClient httpClient = new HttpClient();
 				
-				return httpClient.post(url, rpcRequest);
+				return httpClient.post(rpcRequest);
 			}
 			
 			
 		});
 		
 	}
+	
+//	public <T> T getProxy(final Class<T> interfaceClass,final RPCRequest rpcRequest){
+//		return getProxy(interfaceClass, rpcRequest,URLCache.getDefUrl());
+//	}
 }

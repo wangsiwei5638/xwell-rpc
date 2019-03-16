@@ -35,22 +35,6 @@ public class Test01 {
 //			
 //		}
 		System.out.println( DOMUtils.class.getClassLoader());
-//		<company id="1001">
-//        <name>万科A</name>
-//        <address>广东深圳</address>
-//    </company>
-//    <company id="1002">
-//        <name>恒大B</name>
-//        <address>广东广州</address>
-//    </company>
-//    <company id="1003">
-//        <name>金地C</name>
-//        <address>北京</address>
-//    </company>
-//    <company id="1006">
-//        <name>绿地D</name>
-//        <address>上海</address>
-//    </company>
 
 	}
 

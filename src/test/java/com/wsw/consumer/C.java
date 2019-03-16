@@ -8,12 +8,12 @@ import com.wsw.factory.impl.ProxyFactoryImpl;
 import com.wsw.protocol.http.HttpClient;
 import com.wsw.provider.Hello;
 
-public class T02 {
+public class C {
 
-	private static Logger logger = Logger.getLogger(ProxyFactoryImpl.class); 
+	private static Logger logger = Logger.getLogger(ProxyFactoryImpl.class);
 	public static void main(String[] args) {
-		RPCRequest rpcRequest = new RPCRequest("Hello", "sayHello", new Class[] {String.class}, new Object[]{"wsw"});
-		Hello proxy = new ProxyFactoryImpl().getProxy(Hello.class,rpcRequest,new URL("localhost", 8080));
+		RPCRequest rpcRequest = new RPCRequest(null,"Hello", "sayHello", new Class[] {String.class}, new Object[]{"wsw"});
+		Hello proxy = new ProxyFactoryImpl().getProxy(Hello.class,rpcRequest);
 
 		logger.info(proxy.sayHello("fwefewf"));
 	}
