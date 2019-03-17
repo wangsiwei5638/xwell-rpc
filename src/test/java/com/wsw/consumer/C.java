@@ -12,10 +12,11 @@ public class C {
 
 	private static Logger logger = Logger.getLogger(ProxyFactoryImpl.class);
 	public static void main(String[] args) {
-		RPCRequest rpcRequest = new RPCRequest(null,"Hello", "sayHello", new Class[] {String.class}, new Object[]{"wsw"});
-		Hello proxy = new ProxyFactoryImpl().getProxy(Hello.class,rpcRequest);
+		RPCRequest rpcRequest = new RPCRequest("Hello", "sayHello", new Class[] {String.class});
+		ProxyFactoryImpl proxyFactoryImpl = new ProxyFactoryImpl();
+		Hello proxy = proxyFactoryImpl.getProxy(Hello.class,rpcRequest);
 
-		logger.info(proxy.sayHello("fwefewf"));
+		logger.info(proxy.sayHello("测试"));
 	}
 
 }

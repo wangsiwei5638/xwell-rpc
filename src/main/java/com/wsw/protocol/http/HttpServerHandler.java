@@ -25,7 +25,7 @@ public class HttpServerHandler {
 			RPCRequest rpcRequest = (RPCRequest) objectInputStream.readObject();
 			
 			String interfaceName = rpcRequest.getInterfaceName();
-			URL url = new URL("localhost", 8080);
+			URL url = rpcRequest.getUrl();
 			Class<?> impl = Register.getClass(url, interfaceName);
 			
 			Method method = impl.getMethod(rpcRequest.getMethodName(), rpcRequest.getTypes());

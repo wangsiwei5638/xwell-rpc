@@ -1,12 +1,18 @@
 package com.wsw.bean;
 
+import java.io.Serializable;
 
-/**
- * @author wsw
- *
+/**   
+ * @ClassName:  URL   
+ * @Description:
+ * 					远程目标机器ip端口实体类
+ * @author: wsw
+ * @date:   2019年3月15日
+ * @Copyright: http://www.iwangsiwei.com
  */
-public class URL {
+public class URL implements Serializable{
 
+	private static final long serialVersionUID = -2618625373019741692L;
 	private String host;
 	private Integer prot;
 	

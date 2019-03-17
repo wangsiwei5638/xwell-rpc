@@ -34,17 +34,31 @@ public class RPCRequest implements Serializable{
 	 */   
 	private Object[] params;
 	
+	public RPCRequest(String interfaceName, String methodName) {
+		super();
+		this.interfaceName = interfaceName;
+		this.methodName = methodName;
+		this.url = getUrl();
+	}
+
+	public RPCRequest(String interfaceName, String methodName, Class<?>[] types) {
+		super();
+		this.interfaceName = interfaceName;
+		this.methodName = methodName;
+		this.types = types;
+		this.url = getUrl();
+	}
 	
 	
 	
-	public RPCRequest(URL url, String interfaceName, String methodName, Class<?>[] types, Object[] params) {
+	public RPCRequest(URL url, String interfaceName, String methodName, Class<?>[] types) {
 		super();
 		this.url = url;
 		this.interfaceName = interfaceName;
 		this.methodName = methodName;
 		this.types = types;
-		this.params = params;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

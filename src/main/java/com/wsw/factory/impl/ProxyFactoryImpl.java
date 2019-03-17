@@ -27,6 +27,7 @@ public class ProxyFactoryImpl implements ProxyFactory{
 			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 				
 				HttpClient httpClient = new HttpClient();
+				rpcRequest.setParams(args);
 				
 				return httpClient.post(rpcRequest);
 			}
