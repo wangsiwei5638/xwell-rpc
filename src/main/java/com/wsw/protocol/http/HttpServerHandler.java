@@ -14,26 +14,21 @@ import org.apache.commons.io.IOUtils;
 
 import com.wsw.bean.RPCRequest;
 import com.wsw.bean.URL;
+import com.wsw.protocol.InvokeMethodHandler;
+import com.wsw.protocol.Server;
 import com.wsw.register.Register;
 
-public class HttpServerHandler {
+public class HttpServerHandler extends InvokeMethodHandler implements Server {
 
-	
-	public void handler(HttpServletRequest req, HttpServletResponse resp) {
+	public void handle(HttpServletRequest req, HttpServletResponse resp) {
 		try {
 			ObjectInputStream objectInputStream = new ObjectInputStream(req.getInputStream());
 			RPCRequest rpcRequest = (RPCRequest) objectInputStream.readObject();
-			
-			String interfaceName = rpcRequest.getInterfaceName();
-			URL url = rpcRequest.getUrl();
-			Class<?> impl = Register.getClass(url, interfaceName);
-			
-			Method method = impl.getMethod(rpcRequest.getMethodName(), rpcRequest.getTypes());
-			Object invoke = method.invoke(impl.newInstance(), rpcRequest.getParams());
-			
-			IOUtils.write(invoke.toString(),resp.getOutputStream());
-			
-			
+
+			Object obj = super.doInvoke(rpcRequest);
+
+			IOUtils.write(obj.toString(), resp.getOutputStream());
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,7 +54,7 @@ public class HttpServerHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 }

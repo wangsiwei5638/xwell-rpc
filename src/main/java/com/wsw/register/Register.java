@@ -7,6 +7,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.wsw.bean.URL;
+import com.wsw.service.cache.URLCache;
 
 /**
  * @author wsw
@@ -23,6 +24,10 @@ public class Register {
 	public static void regist(URL url,String interfaceName,Class<?> impl) {
 		try {
 //			LOCK.lock();
+			if(url == null) {
+				//注册失败
+				return ;
+			}
 			Map<URL,Class<?>> registServer = new HashMap<URL,Class<?>>();
 			registServer.put(url, impl);
 			register.put(interfaceName, registServer);
@@ -34,6 +39,11 @@ public class Register {
 			
 		}
 		
+	}
+	
+	public static void regist(String interfaceName,Class<?> impl) {
+		
+		regist(URLCache.getDefUrl(), interfaceName, impl);
 	}
 	
 //	public static URL getRegister(String interfaceName) {

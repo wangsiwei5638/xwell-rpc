@@ -49,8 +49,14 @@ public class RPCRequest implements Serializable{
 		this.url = getUrl();
 	}
 	
-	
-	
+	public RPCRequest(String interfaceName, String methodName, Class<?>[] types, Object[] params) {
+		super();
+		this.interfaceName = interfaceName;
+		this.methodName = methodName;
+		this.types = types;
+		this.params = params;
+	}
+
 	public RPCRequest(URL url, String interfaceName, String methodName, Class<?>[] types) {
 		super();
 		this.url = url;

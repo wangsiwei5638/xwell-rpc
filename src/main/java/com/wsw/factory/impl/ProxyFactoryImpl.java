@@ -29,7 +29,7 @@ public class ProxyFactoryImpl implements ProxyFactory{
 				HttpClient httpClient = new HttpClient();
 				rpcRequest.setParams(args);
 				
-				return httpClient.post(rpcRequest);
+				return httpClient.doSend(rpcRequest);
 			}
 			
 			

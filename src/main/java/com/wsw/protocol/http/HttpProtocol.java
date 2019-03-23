@@ -13,6 +13,7 @@ import org.apache.catalina.core.StandardHost;
 import org.apache.catalina.startup.Tomcat;
 
 import com.wsw.bean.URL;
+import com.wsw.protocol.GeneralProtocol;
 import com.wsw.protocol.Protocol;
 
 /**   
@@ -27,7 +28,7 @@ import com.wsw.protocol.Protocol;
  * @date:   2019年3月23日
  * @Copyright: http://www.iwangsiwei.com
  */
-public class HttpProtocol implements Protocol{
+public class HttpProtocol extends GeneralProtocol{
 
 	public void start(String host,Integer port) {
 		start(new URL(host, port)); 

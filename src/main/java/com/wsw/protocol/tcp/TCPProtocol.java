@@ -1,6 +1,7 @@
 package com.wsw.protocol.tcp;
 
 import com.wsw.bean.URL;
+import com.wsw.protocol.GeneralProtocol;
 import com.wsw.protocol.Protocol;
 
 /**   
@@ -13,7 +14,7 @@ import com.wsw.protocol.Protocol;
  * @date:   2019年3月23日
  * @Copyright: http://www.iwangsiwei.com
  */
-public class TCPProtocol implements Protocol {
+public class TCPProtocol extends GeneralProtocol {
 
 	public void start(URL url) {
 		

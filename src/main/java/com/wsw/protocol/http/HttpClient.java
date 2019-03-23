@@ -13,12 +13,18 @@ import org.apache.log4j.Logger;
 
 import com.wsw.bean.RPCRequest;
 import com.wsw.bean.URL;
+import com.wsw.protocol.Client;
 
-public class HttpClient {
+public class HttpClient implements Client{
 
 	private static Logger logger = Logger.getLogger(HttpClient.class);
 			
-	public String post(RPCRequest rpcRequest) {
+	public Object doSend(RPCRequest rpcRequest) {
+		return post(rpcRequest);
+	}
+	
+	
+	private Object post(RPCRequest rpcRequest) {
 		ObjectOutputStream objectOutputStream = null;
 		try {
 			java.net.URL url = new java.net.URL("http",rpcRequest.getUrl().getHost(),rpcRequest.getUrl().getProt(),"/");
@@ -49,4 +55,5 @@ public class HttpClient {
 		return null;
 
 	}
+
 }
