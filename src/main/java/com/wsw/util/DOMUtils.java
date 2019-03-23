@@ -1,9 +1,9 @@
 package com.wsw.util;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.dom4j.Attribute;
 import org.dom4j.Document;
@@ -55,9 +55,9 @@ public class DOMUtils {
 	 * @param e	需要查找属性的元素
 	 * @return
 	 */
-	public static Map<String, Object> parseRPCXMLAttr(Element e) {
+	private static Map<String, Object> parseRPCXMLAttr(Element e) {
 		AssertUtil.isNotNull(e);
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new ConcurrentHashMap<String, Object>();
 		List<Attribute> attributes = e.attributes();
 		for (Attribute attribute : attributes) {
 			map.put(attribute.getName(), attribute.getData());
@@ -80,9 +80,9 @@ public class DOMUtils {
 	 * @param e	需要查找数据的元素
 	 * @return
 	 */
-	public static Map<String, Object> parseRPCXMLData(Element e) {
+	private static Map<String, Object> parseRPCXMLData(Element e) {
 		AssertUtil.isNotNull(e);
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new ConcurrentHashMap<String, Object>();
 		map.put(e.getName(), e.getData());
 		return map;
 	}

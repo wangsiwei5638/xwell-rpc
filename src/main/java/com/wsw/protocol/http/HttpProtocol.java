@@ -13,14 +13,25 @@ import org.apache.catalina.core.StandardHost;
 import org.apache.catalina.startup.Tomcat;
 
 import com.wsw.bean.URL;
+import com.wsw.protocol.Protocol;
 
-public class HttpProtocol {
+/**   
+ * @ClassName:  HttpProtocol   
+ * @Description:
+ * 					http协议
+ * 
+ * 					客户端服务端通信通过http协议接受请求，返回响应。
+ * 					服务端内置tomcat使用servlet实现，客户端通过java.net.URL创建连接并且写入数据
+ * 
+ * @author: wsw
+ * @date:   2019年3月23日
+ * @Copyright: http://www.iwangsiwei.com
+ */
+public class HttpProtocol implements Protocol{
 
 	public void start(String host,Integer port) {
 		start(new URL(host, port)); 
 	}
-	
-	
 	
 	public void start(URL url) {
 		String hostName = url.getHost();
@@ -70,4 +81,7 @@ public class HttpProtocol {
 	public static void main(String[] args) {
 		new HttpProtocol().start("localhost", 8080);
 	}
+
+
+
 }
