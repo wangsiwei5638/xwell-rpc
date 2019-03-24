@@ -5,7 +5,8 @@
 	version="1.0">
 	
 	
-	<protocol>http</protocol>
+	<protocol>tcp</protocol>
+<!-- 	<protocol>http</protocol> -->
 	<url id="url1" ip="localhost" port="8080"></url>
 
 

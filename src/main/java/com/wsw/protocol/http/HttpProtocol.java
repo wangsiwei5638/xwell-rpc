@@ -15,6 +15,7 @@ import org.apache.catalina.startup.Tomcat;
 import com.wsw.bean.URL;
 import com.wsw.protocol.GeneralProtocol;
 import com.wsw.protocol.Protocol;
+import com.wsw.service.cache.URLCache;
 
 /**   
  * @ClassName:  HttpProtocol   
@@ -30,6 +31,10 @@ import com.wsw.protocol.Protocol;
  */
 public class HttpProtocol extends GeneralProtocol{
 
+	public void start() {
+		start(URLCache.getDefUrl()); 
+	}
+	
 	public void start(String host,Integer port) {
 		start(new URL(host, port)); 
 	}
@@ -65,10 +70,9 @@ public class HttpProtocol extends GeneralProtocol{
 		
 		tomcat.addServlet(contextPath, "dispatcherServlet", new DispatcherServlet());
 		context.addServletMappingDecoded("/*", "dispatcherServlet");
-		System.out.println("tomcat启动成功");
-		
 		try {
 			tomcat.start();
+			System.out.println("tomcat启动成功");
 			tomcat.getServer().await();
 		} catch (LifecycleException e) {
 			System.out.println("tomcat 启动失败");

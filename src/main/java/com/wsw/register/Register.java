@@ -17,6 +17,16 @@ public class Register {
 
 	private static Map<String, Map<URL,Class<?>>> register = new ConcurrentHashMap<String, Map<URL,Class<?>>>();
 	static final Lock LOCK = new ReentrantLock(true);
+	static {
+		//注册缺省配置
+		
+	}
+	
+	private static void init() {
+		//遍历项目，
+		
+		
+	}
 	
 	/**
 	  		注册服务

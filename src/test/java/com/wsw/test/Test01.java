@@ -1,6 +1,9 @@
 package com.wsw.test;
 
+import java.io.File;
 import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,26 +19,10 @@ import com.wsw.util.DOMUtils;
 public class Test01 {
 
 	public static void main(String[] args) throws Exception {
-//		SAXReader reader = new SAXReader();
-//		InputStream is = 
-//				Test01.class.getClassLoader().getResourceAsStream("rpc-config.xml");
-//		Document doc = reader.read(is);
-//		Element rootElement = doc.getRootElement();
-//		Iterator<Element> elementIterator = rootElement.elementIterator();
-//		while (elementIterator.hasNext()) {
-//			Element next = elementIterator.next();
-//			if("url".equals(next.getName())) {
-//				System.out.println(next.attribute("id").getData());
-//				System.out.println(next.attribute("ip").getData());
-//				System.out.println(next.attribute("port").getData());
-//			}else if("protocol".equals(next.getName())) {
-//				System.out.println(next.getData());
-//			}
-//			
-//			
-//		}
-		System.out.println( DOMUtils.class.getClassLoader());
-
+		String property = System.getProperty("user.dir");
+		File file = new File(property);
+		
 	}
+	
 
 }

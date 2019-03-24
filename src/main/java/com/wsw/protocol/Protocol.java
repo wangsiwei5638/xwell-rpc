@@ -11,9 +11,9 @@ import com.wsw.bean.URL;
  * @Copyright: http://www.iwangsiwei.com
  */
 public interface Protocol {
-
+	
 	/**
-	 * 	启动协议
+	 * 	启用协议
 	 */
 	void start(URL url);
 }

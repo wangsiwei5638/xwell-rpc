@@ -6,12 +6,20 @@ import com.wsw.bean.RPCRequest;
 import com.wsw.bean.URL;
 import com.wsw.factory.impl.ProxyFactoryImpl;
 import com.wsw.protocol.http.HttpClient;
+import com.wsw.protocol.tcp.TCPClient;
 import com.wsw.provider.Hello;
 
 public class C {
 
 	private static Logger logger = Logger.getLogger(ProxyFactoryImpl.class);
 	public static void main(String[] args) {
+//		 http()
+		new TCPClient().doSend(
+				new RPCRequest("Hello", "sayHello", new Class[] { String.class }, new Object[] {"hhwsw"}));
+		
+	}
+	
+	static void http() {
 		RPCRequest rpcRequest = new RPCRequest("Hello", "sayHello", new Class[] {String.class});
 		ProxyFactoryImpl proxyFactoryImpl = new ProxyFactoryImpl();
 		Hello proxy = proxyFactoryImpl.getProxy(Hello.class,rpcRequest);

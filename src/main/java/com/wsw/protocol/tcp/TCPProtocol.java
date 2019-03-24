@@ -3,6 +3,7 @@ package com.wsw.protocol.tcp;
 import com.wsw.bean.URL;
 import com.wsw.protocol.GeneralProtocol;
 import com.wsw.protocol.Protocol;
+import com.wsw.service.cache.URLCache;
 
 /**   
  * @ClassName:  TCPProtocol   
@@ -17,8 +18,12 @@ import com.wsw.protocol.Protocol;
 public class TCPProtocol extends GeneralProtocol {
 
 	public void start(URL url) {
-		
+		new TCPServiceHandler().handle();
 
+	}
+	
+	public void start() {
+		start(URLCache.getDefUrl());
 	}
 
 }

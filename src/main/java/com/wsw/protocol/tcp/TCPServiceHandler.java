@@ -31,6 +31,7 @@ import com.wsw.provider.impl.HelloImpl;
 import com.wsw.register.Register;
 import com.wsw.service.cache.URLCache;
 import com.wsw.service.common.RPCConstants;
+import com.wsw.util.CommonUtil;
 
 public class TCPServiceHandler implements Server {
 
@@ -41,11 +42,11 @@ public class TCPServiceHandler implements Server {
 
 		try {
 			ServerSocket serverSocket = new ServerSocket(URLCache.getDefUrl().getProt());
-			System.out.println("服务器启动，等待客户端的连接。。。");
+			System.out.println("TCP服务器启动成功");
 			while (true) {
 				Socket socket = serverSocket.accept();
 				Future<Object> submit = null;
-				String name = UUID.randomUUID().toString();
+				String name = CommonUtil.getUUID();
 				try {
 					submit = pool.submit(new ServerHandleThread(socket, name));
 				} catch (Exception e) {
@@ -61,24 +62,28 @@ public class TCPServiceHandler implements Server {
 
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("TCP服务",e);
+		}finally {
+			pool.shutdown();
+			
 		}
 
 	}
 
 	private class ServerHandleThread extends InvokeMethodHandler implements Callable<Object> {
 		private Socket socket;
+		private String name;
 
 		public ServerHandleThread(Socket socket, String name) {
 			super();
 			this.socket = socket;
+			this.name = name;
 			Thread.currentThread().setName(name);
 		}
 
 		public Object call() throws Exception {
 			OutputStream os = null;
-			PrintWriter pw = null;
+			PrintWriter printWriter = null;
 			try {
 				InputStream is = socket.getInputStream();
 				ObjectInputStream ois = new ObjectInputStream(is);
@@ -90,17 +95,16 @@ public class TCPServiceHandler implements Server {
 
 				Object invoke = super.doInvoke(rpcRequest);
 
-				PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
+				printWriter = new PrintWriter(socket.getOutputStream(), true);
 				printWriter.println(invoke.toString());
 				printWriter.flush();
 
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(name+"执行失败");
 			} finally {
 				try {
-					if (pw != null) {
-						pw.close();
+					if (printWriter != null) {
+						printWriter.close();
 					}
 					if (os != null) {
 						os.close();
@@ -117,12 +121,6 @@ public class TCPServiceHandler implements Server {
 
 			return null;
 		}
-
-	}
-
-	public static void main(String[] args) {
-		Register.regist("Hello", HelloImpl.class);
-		new TCPServiceHandler().handle();
 
 	}
 
