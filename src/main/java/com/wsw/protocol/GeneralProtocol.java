@@ -6,6 +6,7 @@ import com.wsw.exception.RPCException;
 import com.wsw.protocol.http.HttpProtocol;
 import com.wsw.protocol.tcp.TCPProtocol;
 import com.wsw.service.common.ProtocolType;
+import com.wsw.service.common.RPCConstants;
 import com.wsw.util.DOMUtils;
 
 /**   
@@ -20,14 +21,6 @@ import com.wsw.util.DOMUtils;
  */
 public abstract class GeneralProtocol implements Protocol{
 
-	/**   
-	 * @Fields PT : xwell-prc所支持的所有的协议类型
-	 */   
-	private static final ProtocolType[] PT = ProtocolType.values(); 
-	/**   
-	 * @Fields DEF_PROTOCOL : 缺省协议
-	 */   
-	private static final ProtocolType DEF_PROTOCOL = ProtocolType.HTTP; 
 	
 	//设置初始协议
 	static {
@@ -41,16 +34,7 @@ public abstract class GeneralProtocol implements Protocol{
 	 */
 	public static void startServer() {
 		
-		String protocol = System.getProperty("protocol");
-		ProtocolType protocolType = DEF_PROTOCOL;
-		for (ProtocolType p : PT) {
-			String protocolName = p.getProtocolName();
-			if(protocolName.equals(protocol)) {
-				protocolType = p;
-				break;
-			}
-		}
-		
+		ProtocolType protocolType = RPCConstants.getCurrentProtocol();
 		switch (protocolType) {
 			case HTTP:
 				new HttpProtocol().start();

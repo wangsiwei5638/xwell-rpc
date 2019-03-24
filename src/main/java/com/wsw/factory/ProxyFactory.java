@@ -1,7 +1,6 @@
 package com.wsw.factory;
 
 import com.wsw.bean.RPCRequest;
-import com.wsw.bean.URL;
 
 /**   
  * @ClassName:  ProxyFactory   
@@ -15,7 +14,7 @@ import com.wsw.bean.URL;
 public interface ProxyFactory {
 
 	/**
-	 * 	获取代理对象
+	 * 	创建代理对象
 	 */
-	<T> T getProxy(Class<T> interfaceClass,RPCRequest rpcRequest);
+	<T> T newProxy(Class<T> interfaceClass,RPCRequest rpcRequest);
 }
