@@ -14,7 +14,6 @@ import org.apache.catalina.startup.Tomcat;
 
 import com.wsw.bean.URL;
 import com.wsw.protocol.GeneralProtocol;
-import com.wsw.protocol.Protocol;
 import com.wsw.service.cache.URLCache;
 
 /**   

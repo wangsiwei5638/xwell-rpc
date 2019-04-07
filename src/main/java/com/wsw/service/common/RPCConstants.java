@@ -1,15 +1,12 @@
 package com.wsw.service.common;
 
-import java.util.Map;
-
-import com.wsw.util.DOMUtils;
 
 public class RPCConstants {
 
 	/**   
 	 * @Fields CORE_POOL_SIZE : 核心线程数
 	 */   
-	public static final Integer CORE_POOL_SIZE = 10;
+	public static final Integer CORE_POOL_SIZE = 20;
 	
 	/**   
 	 * @Fields XWELL_RPC_DEF_PORT : xwell-rpc默认端口
@@ -23,6 +20,10 @@ public class RPCConstants {
 	 * @Fields DEF_PROTOCOL : 缺省协议
 	 */   
 	public static final ProtocolType DEF_PROTOCOL = ProtocolType.HTTP; 
+	/**   
+	 * @Fields DEF_IO_TYPE : 默认的IO类型	（目前支持nio、bio）
+	 */   
+	public static final IOType DEF_IO_TYPE = IOType.NIO;
 	
 	
 	/**

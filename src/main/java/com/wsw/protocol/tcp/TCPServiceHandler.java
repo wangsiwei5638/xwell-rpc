@@ -1,14 +1,29 @@
 package com.wsw.protocol.tcp;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectableChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -30,45 +45,126 @@ import com.wsw.protocol.Server;
 import com.wsw.provider.impl.HelloImpl;
 import com.wsw.register.Register;
 import com.wsw.service.cache.URLCache;
+import com.wsw.service.common.IOType;
 import com.wsw.service.common.RPCConstants;
 import com.wsw.util.CommonUtil;
 
 public class TCPServiceHandler implements Server {
 
 	private static Logger logger = Logger.getLogger(TCPServiceHandler.class);
+	private static final int NIO_BUFFER_SIZE = 1024;
 
-	public void handle() {
-		ExecutorService pool = Executors.newFixedThreadPool(RPCConstants.CORE_POOL_SIZE);
-
+	public void handle(URL url) {
 		try {
-			ServerSocket serverSocket = new ServerSocket(URLCache.getDefUrl().getProt());
+			String ioType = System.getProperty("ioType");
+			if(IOType.BIO.ioName.equals(ioType)) {
+				bioRun(url);
+			}else if(IOType.NIO.ioName.equals(ioType)) {
+				nioRun(url);
+			}
+		} catch (Exception e) {
+			logger.error("TCP服务器异常",e);
+		}
+
+	}
+	
+	private void nioRun(URL url) {
+		//nio的三大核心： channel多路复用、selector选择器、buffer缓存
+		try {
+			ServerSocketChannel channel = ServerSocketChannel.open();
+			channel.configureBlocking(false);
+			channel.bind(new InetSocketAddress(url.getProt()));
+			
+			Selector selector = Selector.open();
+			channel.register(selector, SelectionKey.OP_ACCEPT);
+
+			ByteBuffer buf = ByteBuffer.allocate(NIO_BUFFER_SIZE);
+			int j = 0 ;
+			while (true) {
+				System.out.println(j++);
+				int i = selector.select();
+				if(i == 0) {
+					continue;
+				}
+				//如果select中有channel
+				Set<SelectionKey> selectedKeys = selector.selectedKeys();
+				Iterator<SelectionKey> iterator = selectedKeys.iterator();
+				while (iterator.hasNext()) {
+					SelectionKey selectionKey = iterator.next();
+					//如果可以被访问
+					if(selectionKey.isAcceptable()) {
+						ServerSocketChannel c = (ServerSocketChannel) selectionKey.channel();
+						SocketChannel clientChannel = c.accept();
+						clientChannel.configureBlocking(false);
+						clientChannel.register(selector, SelectionKey.OP_READ);
+					}
+					if(selectionKey.isReadable()) {
+						//接受数据
+						SocketChannel c = (SocketChannel) selectionKey.channel();
+						c.read(buf);
+//						ObjectOutputStream objectOutputStream = new ObjectOutputStream(new ByteArrayOutputStream());
+//						objectOutputStream.writeObject();
+						ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(buf.array()));
+						RPCRequest rpcRequest = (RPCRequest) objectInputStream.readObject();
+						
+							
+						String interfaceName = rpcRequest.getInterfaceName();
+						Class<?> impl = Register.getClass(url, interfaceName);
+						
+						Method method = impl.getMethod(rpcRequest.getMethodName(), rpcRequest.getTypes());
+						Object invoke = method.invoke(impl.newInstance(), rpcRequest.getParams());
+						c.write(ByteBuffer.wrap("hhh".getBytes()));
+//						PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
+//						printWriter = new PrintWriter(socket.getOutputStream(), true);
+//						printWriter.println(invoke.toString());
+//						printWriter.flush();
+						
+						buf.clear();
+						
+						
+					}
+					iterator.remove();
+				}
+				
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	private void bioRun(URL url) {
+		ExecutorService pool = Executors.newFixedThreadPool(RPCConstants.CORE_POOL_SIZE);
+		ServerSocket serverSocket = null;
+		try {
+			serverSocket = new ServerSocket(url.getProt());
 			System.out.println("TCP服务器启动成功");
 			while (true) {
 				Socket socket = serverSocket.accept();
-				Future<Object> submit = null;
+//				Future<Object> submit = null;
 				String name = CommonUtil.getUUID();
 				try {
-					submit = pool.submit(new ServerHandleThread(socket, name));
+					pool.submit(new ServerHandleThread(socket, name));
 				} catch (Exception e) {
 					logger.error(name + "线程执行失败", e);
 				}
-
-//				if(submit != null) {
-//					System.out.println(submit.get());
-//				}
-
-//				InetAddress inetAddress = socket.getInetAddress();
-//				System.out.println("当前客户端的IP地址是：" + inetAddress.getHostAddress());
-
 			}
 		} catch (Exception e) {
 			logger.error("TCP服务",e);
 		}finally {
+			if(serverSocket != null) {
+				try {
+					serverSocket.close();
+				} catch (IOException e) {
+				}
+			}
 			pool.shutdown();
 			
 		}
-
 	}
+	
 
 	private class ServerHandleThread extends InvokeMethodHandler implements Callable<Object> {
 		private Socket socket;

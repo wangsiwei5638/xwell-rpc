@@ -65,12 +65,22 @@ public abstract class GeneralProtocol implements Protocol{
 	 * 	初始化协议
 	 */
 	private static void init() {
+		//设置协议
 		Map<String, Object> data = DOMUtils.parseRPCXMLData("protocol");
 		Object o;
 		String protocol;
-		protocol=((o = data.get("protocol"))==null||"".equals(o.toString().trim()))?"http":o.toString();
+		protocol=((o = data.get("protocol"))==null||"".equals(o.toString().trim()))?
+				RPCConstants.DEF_PROTOCOL.protocolName:o.toString();
 		System.setProperty("protocol", protocol);
 		
+		//设置IO模式
+		Map<String, Object> attr = DOMUtils.parseRPCXMLAttr(null, "protocol");
+		String ioType;
+		ioType = ((o = attr.get("ioType"))==null||"".equals(o.toString().trim()))?
+				RPCConstants.DEF_IO_TYPE.ioName:o.toString();
+		System.setProperty("ioType", ioType);
+		
 	}
+	
 	
 }

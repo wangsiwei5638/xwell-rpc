@@ -24,9 +24,12 @@ public class URLCache {
 	}
 
 	public static URL getDefUrl() {
-		synchronized (URLCache.class) {
-			if(DEF_URL == null) {
-				init();
+		//懒汉模式 双从检查
+		if(DEF_URL == null) {
+			synchronized (URLCache.class) {
+				if(DEF_URL == null) {
+					init();
+				}
 			}
 		}
 		

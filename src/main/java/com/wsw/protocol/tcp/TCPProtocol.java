@@ -18,7 +18,7 @@ import com.wsw.service.cache.URLCache;
 public class TCPProtocol extends GeneralProtocol {
 
 	public void start(URL url) {
-		new TCPServiceHandler().handle();
+		new TCPServiceHandler().handle(url);
 
 	}
 	
