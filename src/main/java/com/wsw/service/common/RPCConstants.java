@@ -24,8 +24,12 @@ public class RPCConstants {
 	 * @Fields DEF_IO_TYPE : 默认的IO类型	（目前支持nio、bio）
 	 */   
 	public static final IOType DEF_IO_TYPE = IOType.NIO;
-	
-	
+	/**
+	 * @Fields NIO_BUFFER_SIZE : NIO缓冲区大小
+	 */
+	public static final Integer NIO_BUFFER_SIZE = 1024;
+
+
 	/**
 	 * 		获取当前协议类型
 	 */

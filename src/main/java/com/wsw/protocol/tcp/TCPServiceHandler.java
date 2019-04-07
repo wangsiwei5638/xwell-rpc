@@ -22,6 +22,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
@@ -52,7 +53,6 @@ import com.wsw.util.CommonUtil;
 public class TCPServiceHandler implements Server {
 
 	private static Logger logger = Logger.getLogger(TCPServiceHandler.class);
-	private static final int NIO_BUFFER_SIZE = 1024;
 
 	public void handle(URL url) {
 		try {
@@ -71,19 +71,20 @@ public class TCPServiceHandler implements Server {
 	private void nioRun(URL url) {
 		//nio的三大核心： channel多路复用、selector选择器、buffer缓存
 		try {
+			Charset charset = Charset.forName("utf-8");
+			InetSocketAddress inetSocketAddress = new InetSocketAddress(url.getProt());
+			Selector selector = Selector.open();
+
 			ServerSocketChannel channel = ServerSocketChannel.open();
 			channel.configureBlocking(false);
-			channel.bind(new InetSocketAddress(url.getProt()));
-			
-			Selector selector = Selector.open();
+			channel.bind(inetSocketAddress);
 			channel.register(selector, SelectionKey.OP_ACCEPT);
 
-			ByteBuffer buf = ByteBuffer.allocate(NIO_BUFFER_SIZE);
+			ByteBuffer buf = ByteBuffer.allocate(RPCConstants.NIO_BUFFER_SIZE);
 			int j = 0 ;
 			while (true) {
 				System.out.println(j++);
-				int i = selector.select();
-				if(i == 0) {
+				if(selector.select() == 0) {
 					continue;
 				}
 				//如果select中有channel
@@ -106,22 +107,13 @@ public class TCPServiceHandler implements Server {
 //						objectOutputStream.writeObject();
 						ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(buf.array()));
 						RPCRequest rpcRequest = (RPCRequest) objectInputStream.readObject();
-						
-							
 						String interfaceName = rpcRequest.getInterfaceName();
 						Class<?> impl = Register.getClass(url, interfaceName);
 						
 						Method method = impl.getMethod(rpcRequest.getMethodName(), rpcRequest.getTypes());
 						Object invoke = method.invoke(impl.newInstance(), rpcRequest.getParams());
-						c.write(ByteBuffer.wrap("hhh".getBytes()));
-//						PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
-//						printWriter = new PrintWriter(socket.getOutputStream(), true);
-//						printWriter.println(invoke.toString());
-//						printWriter.flush();
-						
+						c.write(ByteBuffer.wrap(invoke.toString().getBytes()));
 						buf.clear();
-						
-						
 					}
 					iterator.remove();
 				}

@@ -32,7 +32,7 @@ public class C {
 		
 		RPCRequest rpcRequest = new RPCRequest("Hello", "sayHello", new Class[] {String.class});
 		Hello proxy = ProxyFactoryImpl.getProxy(Hello.class,rpcRequest);
-		String sayHello = proxy.sayHello("wsw123");
+		String sayHello = proxy.sayHello("wsw..123");
 		System.out.println(sayHello);
 
 	}

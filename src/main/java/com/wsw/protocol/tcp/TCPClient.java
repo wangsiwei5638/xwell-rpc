@@ -1,28 +1,73 @@
 package com.wsw.protocol.tcp;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
+
 import com.wsw.bean.RPCRequest;
 import com.wsw.protocol.Client;
 import com.wsw.service.cache.URLCache;
+import com.wsw.service.common.IOType;
+import com.wsw.service.common.RPCConstants;
 
 public class TCPClient implements Client {
 
 	public Object doSend(RPCRequest rpcRequest) {
+		Object res = null;
+		try {
+			String ioType = System.getProperty("ioType");
+			if(IOType.BIO.ioName.equals(ioType)) {
+				res = bioRun(rpcRequest);
+			}else if(IOType.NIO.ioName.equals(ioType)) {
+				res = nioRun(rpcRequest);
+			}
+		} catch (Exception e) {
+		}
+		return res;
+	}
+
+	private Object nioRun(RPCRequest rpcRequest){
+		try {
+			InetSocketAddress inetSocketAddress = new InetSocketAddress(rpcRequest.getUrl().getHost(), rpcRequest.getUrl().getProt());
+
+			Selector selector = Selector.open();
+
+			SocketChannel socketChannel = SocketChannel.open(inetSocketAddress);
+			socketChannel.configureBlocking(false);
+			socketChannel.register(selector, SelectionKey.OP_READ);
+			//rpcRequest对象转byte数组
+			ByteArrayOutputStream bo = new ByteArrayOutputStream();
+			ObjectOutputStream oo = new ObjectOutputStream(bo);
+			oo.writeObject(rpcRequest);
+			byte[] bytes = bo.toByteArray();
+			//向服务器发送信息
+			socketChannel.write(ByteBuffer.wrap(bytes));
+			//接受服务器响应
+			ByteBuffer buffer = ByteBuffer.allocate(RPCConstants.NIO_BUFFER_SIZE);
+			socketChannel.read(buffer);
+
+			socketChannel.close();
+			return new String(buffer.array());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
+	private Object bioRun(RPCRequest rpcRequest){
 		// 1.创建客户端的Socket，指定服务器的IP和端口
 		try {
 			Socket socket = newSocket();
-
 			// 2.获取该Socket的输出流，用来向服务器发送信息
 			ObjectOutputStream os = new ObjectOutputStream(socket.getOutputStream());
 			os.writeObject(rpcRequest);
 			socket.shutdownOutput();
-
 			// 3.获取输入流，取得服务器的信息
 			InputStream is = socket.getInputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
